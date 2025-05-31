@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>متره‌یار - آپلود فایل</title>
+</head>
+<body>
+  <h2>آپلود فایل</h2>
+  <form id="uploadForm">
+    <input type="file" name="file" id="fileInput" />
+    <button type="submit">ارسال</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById("uploadForm");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById("fileInput");
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const res = await fetch("http://localhost:8000/upload/", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        result.innerText = `✅ فایل آپلود شد: ${data.filename}`;
+      } catch (err) {
+        result.innerText = "❌ خطا در آپلود فایل";
+      }
+    });
+  </script>
+</body>
+</html>
